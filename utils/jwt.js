@@ -5,7 +5,7 @@ dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET;
 
-const generateAccessToken = (user) => {
+const generateAccessToken = (user, expiresIn = "15m") => {
   const roles = user.Roles;
 
   const roleIds = roles.map((role) => role.role_id);
@@ -17,7 +17,7 @@ const generateAccessToken = (user) => {
   };
 
   const options = {
-    expiresIn: "1m",
+    expiresIn: `${expiresIn}`,
   };
 
   const token = jwt.sign(payload, jwtSecret, options);
