@@ -25,4 +25,10 @@ const generateAccessToken = (user, expiresIn = "15m") => {
   return token;
 };
 
-module.exports = { generateAccessToken };
+const verifyToken = (token) => {
+  const decoded = jwt.verify(token, jwtSecret);
+
+  return decoded;
+};
+
+module.exports = { generateAccessToken, verifyToken };
