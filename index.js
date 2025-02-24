@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const router = require("./routes/router");
+const cookieParser = require("cookie-parser");
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.listen(PORT, () => console.log(`Listening PORT ${PORT}`));
 // Middleware
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Middleware
 
