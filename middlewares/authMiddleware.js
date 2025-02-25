@@ -1,4 +1,7 @@
 const { verifyToken } = require("../utils/jwt");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const authMiddleware = (req, res, next) => {
   const token =
@@ -14,6 +17,7 @@ const authMiddleware = (req, res, next) => {
   // if token found
   try {
     const decoded = verifyToken(token);
+    req.decoded = decoded;
 
     next();
   } catch (e) {
@@ -21,4 +25,38 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+const authTenantMiddleware = (req, res, next) => {
+  const {
+    decoded: { role_id },
+  } = req;
+
+  const roleId = process.env.ROLE_ID_TENANT;
+
+  if (parseInt(roleId) === parseInt(role_id)) {
+    next();
+  } else {
+    return res
+      .status(403)
+      .json({ error: "Forbidden", message: "You do not have permission" });
+  }
+};
+
+const authOwnerMiddleware = (req, res, next) => {
+  const {
+    decoded: { role_id },
+  } = req;
+
+  const roleId = process.env.ROLE_ID_OWNER;
+
+  if (parseInt(roleId) === parseInt(role_id)) {
+    next();
+  } else {
+    return res
+      .status(403)
+      .json({ error: "Forbidden", message: "You do not have permission" });
+  }
+};
+
 module.exports = authMiddleware;
+module.exports.authTenantMiddleware = authTenantMiddleware;
+module.exports.authOwnerMiddleware = authOwnerMiddleware;
