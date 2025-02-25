@@ -92,7 +92,12 @@ const registerSchema = {
     },
 
     customSanitizer: {
-      options: (value) => value.map((value) => parseInt(value)),
+      options: (value) => {
+        if (!Array.isArray(value)) return [];
+        else {
+          return value?.map((value) => parseInt(value));
+        }
+      },
     },
   },
 };
