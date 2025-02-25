@@ -1,9 +1,10 @@
 const { User, Role, UserRole } = require("../models");
 const { checkPassword } = require("../utils/password");
 const { generateAccessToken } = require("../utils/jwt");
+const { checkRole } = require("../utils/checkRole");
 
 const loginService = async (data) => {
-  const { email, password } = data;
+  const { email, password, roleId } = data;
 
   //   Check whether user exist
   const user = await User.scope("withPassword").findOne({
@@ -32,9 +33,18 @@ const loginService = async (data) => {
     throw error;
   }
 
-  const token = generateAccessToken(user);
+  // check role
+  const isRoleFound = checkRole(user, roleId);
 
-  return token;
+  if (!isRoleFound) {
+    const error = new Error("Invalid role");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const token = generateAccessToken(user, roleId);
+
+  return { token, roleId };
 };
 
 const registerService = async (data) => {

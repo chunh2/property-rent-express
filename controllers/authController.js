@@ -6,7 +6,7 @@ const login = async (req, res, next) => {
   const data = matchedData(req);
 
   try {
-    const token = await loginService(data);
+    const { token, roleId } = await loginService(data);
 
     const { exp } = verifyToken(token);
     const expireAt = new Date(exp * 1000);
@@ -15,12 +15,12 @@ const login = async (req, res, next) => {
     expireAt.setHours(expireAt.getHours() + 8);
 
     res.cookie("accessToken", token, {
-      httpOnly: true,
+      httpOnly: false,
       sameSite: "Lax",
       expires: expireAt,
     });
 
-    return res.status(200).json(token);
+    return res.status(200).json({ token, roleId });
   } catch (e) {
     return res.status(e.statusCode).json({ error: e.message });
   }
