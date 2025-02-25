@@ -5,15 +5,11 @@ dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET;
 
-const generateAccessToken = (user, expiresIn = "15m") => {
-  const roles = user.Roles;
-
-  const roleIds = roles.map((role) => role.role_id);
-
+const generateAccessToken = (user, roleId, expiresIn = "1m") => {
   const payload = {
     user_id: user.user_id,
     email: user.email,
-    roles: roleIds,
+    role_id: roleId,
   };
 
   const options = {
