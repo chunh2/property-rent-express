@@ -38,6 +38,16 @@ const loginSchema = {
       errorMessage: "At least 8 characters",
     },
   },
+
+  roleId: {
+    in: ["body"],
+    trim: true,
+    escape: true,
+
+    notEmpty: {
+      errorMessage: "Role is required",
+    },
+  },
 };
 
 module.exports = checkSchema(loginSchema);
