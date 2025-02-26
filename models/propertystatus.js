@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      PropertyStatus.hasMany(models.Property, {
+        foreignKey: "property_status_id",
+        as: "properties",
+      });
     }
   }
   PropertyStatus.init(

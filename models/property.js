@@ -26,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
         as: "state",
         onDelete: "RESTRICT",
       });
+
+      Property.belongsTo(models.PropertyStatus, {
+        foreignKey: "property_status_id",
+        as: "property_status",
+        onDelete: "RESTRICT",
+      });
     }
   }
   Property.init(
@@ -98,6 +104,16 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         onDelete: "RESTRICT",
+      },
+      property_status_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "property_statuses",
+          key: "id",
+        },
+        onDelete: "RESTRICT",
+        defaultValue: 1,
       },
     },
     {
