@@ -40,4 +40,31 @@ const register = async (req, res, next) => {
   }
 };
 
-module.exports = { login, register };
+const validate = (req, res) => {
+  const token =
+    req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
+
+  // if no token found
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: "Missing token", message: "Token is required" });
+  }
+
+  // if token found
+  try {
+    const decoded = verifyToken(token);
+
+    console.log(decoded);
+
+    if (!decoded) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    return res.status(200).json({ message: "Authorized" });
+  } catch (e) {
+    return res.status(401).json({ message: "Invalid token", error: e.name });
+  }
+};
+
+module.exports = { login, register, validate };
