@@ -1,7 +1,10 @@
 const { Router } = require("express");
 const authMiddleware = require("../middlewares/authMiddleware");
 const { authOwnerMiddleware } = require("../middlewares/authMiddleware");
-const { addProperty } = require("../controllers/propertyOwnerController");
+const {
+  addProperty,
+  getProperties,
+} = require("../controllers/propertyOwnerController");
 const addPropertyValidate = require("../validations/propertyOwner/addPropertyValidate");
 const validateReqMiddleware = require("../middlewares/utils/validateReqMiddleware");
 
@@ -15,5 +18,7 @@ router.post(
   validateReqMiddleware,
   addProperty
 );
+
+router.get("/properties", getProperties);
 
 module.exports = router;

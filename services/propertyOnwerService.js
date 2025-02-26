@@ -1,4 +1,4 @@
-const { Property } = require("../models");
+const { Property, User } = require("../models");
 
 const addPropertyService = async (data, decoded) => {
   const { user_id } = decoded;
@@ -14,4 +14,30 @@ const addPropertyService = async (data, decoded) => {
   return property;
 };
 
-module.exports = { addPropertyService };
+const getPropertiesService = async (user_id) => {
+  // check if user exists
+  const user = await User.findByPk(user_id);
+
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    return error;
+  }
+
+  //   search for properties
+  const properties = await Property.findAll({
+    where: {
+      user_id,
+    },
+  });
+
+  if (!properties.length) {
+    const error = new Error("No properties found");
+    error.statusCode = 404;
+    return error;
+  }
+
+  return properties;
+};
+
+module.exports = { addPropertyService, getPropertiesService };

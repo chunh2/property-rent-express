@@ -1,5 +1,8 @@
 const { matchedData } = require("express-validator");
-const { addPropertyService } = require("../services/propertyOnwerService");
+const {
+  addPropertyService,
+  getPropertiesService,
+} = require("../services/propertyOnwerService");
 
 const addProperty = async (req, res) => {
   const data = matchedData(req);
@@ -17,4 +20,18 @@ const addProperty = async (req, res) => {
   }
 };
 
-module.exports = { addProperty };
+const getProperties = async (req, res) => {
+  const { user_id } = req.decoded;
+
+  try {
+    const properties = await getPropertiesService(user_id);
+
+    return res
+      .status(200)
+      .json({ message: "Properties found", data: properties });
+  } catch (e) {
+    return res.status(e.statusCode).json({ error: e.message });
+  }
+};
+
+module.exports = { addProperty, getProperties };
