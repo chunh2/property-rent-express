@@ -12,7 +12,13 @@ module.exports = (sequelize, DataTypes) => {
       Property.belongsTo(models.PropertyType, {
         foreignKey: "property_type_id",
         onDelete: "SET NULL",
-        as: "property_types",
+        as: "property_type",
+      });
+
+      Property.belongsTo(models.User, {
+        foreignKey: "user_id",
+        onDelete: "CASCADE",
+        as: "user",
       });
     }
   }
@@ -68,6 +74,15 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         onDelete: "SET NULL",
+      },
+      user_id: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        references: {
+          model: "users",
+          key: "user_id",
+        },
+        onDelete: "CASCADE",
       },
     },
     {
