@@ -3,6 +3,7 @@ const {
   addPropertyService,
   getPropertiesService,
   updatePropertyService,
+  deletePropertyService,
 } = require("../services/propertyOnwerService");
 
 const addProperty = async (req, res) => {
@@ -50,4 +51,19 @@ const updateProperty = async (req, res) => {
   }
 };
 
-module.exports = { addProperty, getProperties, updateProperty };
+const deleteProperty = async (req, res) => {
+  const {
+    params: { id },
+    decoded: { user_id },
+  } = req;
+
+  try {
+    await deletePropertyService(id, user_id);
+
+    return res.status(200).json({ message: "Property deleted successfully" });
+  } catch (e) {
+    return res.status(e.statusCode).json({ error: e.message });
+  }
+};
+
+module.exports = { addProperty, getProperties, updateProperty, deleteProperty };

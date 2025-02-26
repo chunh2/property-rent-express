@@ -5,6 +5,7 @@ const {
   addProperty,
   getProperties,
   updateProperty,
+  deleteProperty,
 } = require("../controllers/propertyOwnerController");
 const addPropertyValidate = require("../validations/propertyOwner/addPropertyValidate");
 const validateReqMiddleware = require("../middlewares/utils/validateReqMiddleware");
@@ -29,5 +30,7 @@ router.patch(
   validateReqMiddleware,
   updateProperty
 );
+
+router.delete("/properties/:id", deleteProperty);
 
 module.exports = router;
