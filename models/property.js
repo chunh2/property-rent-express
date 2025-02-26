@@ -20,6 +20,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         as: "user",
       });
+
+      Property.belongsTo(models.State, {
+        foreignKey: "state_id",
+        as: "state",
+        onDelete: "RESTRICT",
+      });
     }
   }
   Property.init(
@@ -83,6 +89,15 @@ module.exports = (sequelize, DataTypes) => {
           key: "user_id",
         },
         onDelete: "CASCADE",
+      },
+      state_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "states",
+          key: "id",
+        },
+        onDelete: "RESTRICT",
       },
     },
     {
