@@ -3,12 +3,22 @@ const { Property, User } = require("../models");
 const addPropertyService = async (data, decoded) => {
   const { user_id } = decoded;
 
+  //   check if user exists
+  const user = await User.findByPk(user_id);
+
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  //   create property
   const property = await Property.create({ ...data, user_id });
 
   if (!property) {
     const error = new Error("Internal server error");
     error.statusCode = 500;
-    return error;
+    throw error;
   }
 
   return property;
@@ -21,7 +31,7 @@ const getPropertiesService = async (user_id) => {
   if (!user) {
     const error = new Error("User not found");
     error.statusCode = 404;
-    return error;
+    throw error;
   }
 
   //   search for properties
@@ -34,7 +44,7 @@ const getPropertiesService = async (user_id) => {
   if (!properties.length) {
     const error = new Error("No properties found");
     error.statusCode = 404;
-    return error;
+    throw error;
   }
 
   return properties;
