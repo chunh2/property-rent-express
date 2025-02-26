@@ -2,6 +2,7 @@ const { matchedData } = require("express-validator");
 const {
   addPropertyService,
   getPropertiesService,
+  updatePropertyService,
 } = require("../services/propertyOnwerService");
 
 const addProperty = async (req, res) => {
@@ -34,4 +35,19 @@ const getProperties = async (req, res) => {
   }
 };
 
-module.exports = { addProperty, getProperties };
+const updateProperty = async (req, res) => {
+  const data = matchedData(req);
+  const {
+    decoded: { user_id },
+  } = req;
+
+  try {
+    await updatePropertyService(data, user_id);
+
+    return res.status(200).json({ message: "Property updated successfully" });
+  } catch (e) {
+    return res.status(e.statusCode).json({ error: e.message });
+  }
+};
+
+module.exports = { addProperty, getProperties, updateProperty };

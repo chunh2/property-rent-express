@@ -4,9 +4,11 @@ const { authOwnerMiddleware } = require("../middlewares/authMiddleware");
 const {
   addProperty,
   getProperties,
+  updateProperty,
 } = require("../controllers/propertyOwnerController");
 const addPropertyValidate = require("../validations/propertyOwner/addPropertyValidate");
 const validateReqMiddleware = require("../middlewares/utils/validateReqMiddleware");
+const updatePropertyValidate = require("../validations/propertyOwner/updatePropertyValidate");
 
 const router = Router();
 
@@ -20,5 +22,12 @@ router.post(
 );
 
 router.get("/properties", getProperties);
+
+router.patch(
+  "/properties/:id",
+  updatePropertyValidate,
+  validateReqMiddleware,
+  updateProperty
+);
 
 module.exports = router;
