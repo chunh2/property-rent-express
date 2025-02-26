@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Property.belongsTo(models.PropertyType, {
+        foreignKey: "property_type_id",
+        onDelete: "SET NULL",
+        as: "property_types",
+      });
     }
   }
   Property.init(
@@ -54,6 +59,15 @@ module.exports = (sequelize, DataTypes) => {
           min: 0,
           isInt: true,
         },
+      },
+      property_type_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "property_types",
+          key: "id",
+        },
+        onDelete: "SET NULL",
       },
     },
     {
