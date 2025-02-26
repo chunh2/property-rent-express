@@ -5,6 +5,6 @@ const propertyOwnerRouter = require("./propertyOwnerRoutes");
 const router = Router();
 
 router.use("/", authRoutes);
-router.use("/", propertyOwnerRouter);
+router.use("/owner/", propertyOwnerRouter);
 
 module.exports = router;
