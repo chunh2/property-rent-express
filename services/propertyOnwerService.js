@@ -1,4 +1,10 @@
-const { Property, User } = require("../models");
+const {
+  Property,
+  User,
+  PropertyType,
+  State,
+  PropertyStatus,
+} = require("../models");
 
 const addPropertyService = async (data, decoded) => {
   const { user_id } = decoded;
@@ -39,6 +45,20 @@ const getPropertiesService = async (user_id) => {
     where: {
       user_id,
     },
+    include: [
+      {
+        model: PropertyType,
+        as: "property_type",
+      },
+      {
+        model: State,
+        as: "state",
+      },
+      {
+        model: PropertyStatus,
+        as: "property_status",
+      },
+    ],
   });
 
   if (!properties.length) {
