@@ -40,7 +40,7 @@ const register = async (req, res, next) => {
   }
 };
 
-const validate = (req, res) => {
+const validateOwner = (req, res) => {
   const token =
     req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
 
@@ -55,9 +55,18 @@ const validate = (req, res) => {
   try {
     const decoded = verifyToken(token);
 
+    const { role_id } = decoded;
+
+    const roleId = process.env.ROLE_ID_OWNER;
+
     console.log(decoded);
 
     if (!decoded) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // role not match
+    if (role_id !== roleId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
@@ -67,4 +76,40 @@ const validate = (req, res) => {
   }
 };
 
-module.exports = { login, register, validate };
+const validateTenant = (req, res) => {
+  const token =
+    req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
+
+  // if no token found
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: "Missing token", message: "Token is required" });
+  }
+
+  // if token found
+  try {
+    const decoded = verifyToken(token);
+
+    const { role_id } = decoded;
+
+    const roleId = process.env.ROLE_ID_TENANT;
+
+    console.log(decoded);
+
+    if (!decoded) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // role not match
+    if (role_id !== roleId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    return res.status(200).json({ message: "Authorized" });
+  } catch (e) {
+    return res.status(401).json({ message: "Invalid token", error: e.name });
+  }
+};
+
+module.exports = { login, register, validateOwner, validateTenant };
