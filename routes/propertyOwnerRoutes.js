@@ -10,6 +10,7 @@ const {
 const addPropertyValidate = require("../validations/propertyOwner/addPropertyValidate");
 const validateReqMiddleware = require("../middlewares/utils/validateReqMiddleware");
 const updatePropertyValidate = require("../validations/propertyOwner/updatePropertyValidate");
+const getPropertiesValidate = require("../validations/propertyOwner/getPropertiesValidate");
 
 const router = Router();
 
@@ -22,7 +23,12 @@ router.post(
   addProperty
 );
 
-router.get("/properties", getProperties);
+router.get(
+  "/properties",
+  getPropertiesValidate,
+  validateReqMiddleware,
+  getProperties
+);
 
 router.patch(
   "/properties/:id",

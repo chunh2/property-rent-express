@@ -24,9 +24,10 @@ const addProperty = async (req, res) => {
 
 const getProperties = async (req, res) => {
   const { user_id } = req.decoded;
+  const data = matchedData(req);
 
   try {
-    const properties = await getPropertiesService(user_id);
+    const properties = await getPropertiesService(user_id, data);
 
     return res
       .status(200)

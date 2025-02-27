@@ -30,7 +30,15 @@ const addPropertyService = async (data, decoded) => {
   return property;
 };
 
-const getPropertiesService = async (user_id) => {
+const getPropertiesService = async (user_id, data) => {
+  const {
+    page = 1,
+    limit = 20,
+    sortBy = "createdAt",
+    sortOrder = "DESC",
+  } = data;
+  console.log(data);
+
   // check if user exists
   const user = await User.findByPk(user_id);
 
@@ -40,11 +48,16 @@ const getPropertiesService = async (user_id) => {
     throw error;
   }
 
+  const offset = (page - 1) * limit;
+
   //   search for properties
-  const properties = await Property.findAll({
+  const { count, rows: properties } = await Property.findAndCountAll({
     where: {
       user_id,
     },
+    limit,
+    offset,
+    order: [[sortBy, sortOrder]],
     include: [
       {
         model: PropertyType,
