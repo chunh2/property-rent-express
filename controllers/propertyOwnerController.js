@@ -27,11 +27,11 @@ const getProperties = async (req, res) => {
   const data = matchedData(req);
 
   try {
-    const properties = await getPropertiesService(user_id, data);
+    const { count, properties } = await getPropertiesService(user_id, data);
 
     return res
       .status(200)
-      .json({ message: "Properties found", data: properties });
+      .json({ message: "Properties found", count, data: properties });
   } catch (e) {
     return res.status(e.statusCode).json({ error: e.message });
   }

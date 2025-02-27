@@ -85,7 +85,7 @@ const getPropertiesService = async (user_id, data) => {
     throw error;
   }
 
-  return properties;
+  return { count, properties };
 };
 
 const updatePropertyService = async (data, user_id) => {
