@@ -61,6 +61,20 @@ const getPropertiesSchema = {
       errorMessage: "Sort order should be either 'ASC' or 'DESC'",
     },
   },
+
+  property_status_id: {
+    in: ["query"],
+    trim: true,
+    escape: true,
+    optional: true,
+
+    isInt: {
+      options: { min: 1, max: 4 },
+      errorMessage: "State ID must be integer between 1 and 4",
+    },
+
+    toInt: true,
+  },
 };
 
 module.exports = checkSchema(getPropertiesSchema);

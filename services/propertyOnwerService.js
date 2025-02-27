@@ -36,6 +36,7 @@ const getPropertiesService = async (user_id, data) => {
     limit = 20,
     sortBy = "createdAt",
     sortOrder = "DESC",
+    property_status_id,
   } = data;
   console.log(data);
 
@@ -50,11 +51,15 @@ const getPropertiesService = async (user_id, data) => {
 
   const offset = (page - 1) * limit;
 
+  const whereConditions = { user_id };
+
+  if (property_status_id) {
+    whereConditions.property_status_id = property_status_id;
+  }
+
   //   search for properties
   const { count, rows: properties } = await Property.findAndCountAll({
-    where: {
-      user_id,
-    },
+    where: whereConditions,
     limit,
     offset,
     order: [[sortBy, sortOrder]],
