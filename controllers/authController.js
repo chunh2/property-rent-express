@@ -12,7 +12,7 @@ const login = async (req, res, next) => {
     const expireAt = new Date(exp * 1000);
 
     res.cookie("accessToken", token, {
-      httpOnly: false,
+      httpOnly: true,
       sameSite: "Lax",
       expires: expireAt,
     });
