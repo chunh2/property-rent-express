@@ -11,9 +11,6 @@ const login = async (req, res, next) => {
     const { exp } = verifyToken(token);
     const expireAt = new Date(exp * 1000);
 
-    // set timezone for cookie expire (UTC+8)
-    expireAt.setHours(expireAt.getHours() + 8);
-
     res.cookie("accessToken", token, {
       httpOnly: false,
       sameSite: "Lax",
