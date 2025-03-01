@@ -32,6 +32,12 @@ module.exports = (sequelize, DataTypes) => {
         as: "property_status",
         onDelete: "RESTRICT",
       });
+
+      Property.hasMany(models.PropertyImage, {
+        foreignKey: "property_id",
+        as: "property_images",
+        onDelete: "CASCADE",
+      });
     }
   }
   Property.init(
