@@ -8,11 +8,11 @@ const {
 
 const addProperty = async (req, res) => {
   const data = matchedData(req);
-  const { decoded } = req;
+  const { decoded, files } = req;
 
   console.log(data);
   try {
-    const property = await addPropertyService(data, decoded);
+    const property = await addPropertyService(data, decoded, files);
 
     return res
       .status(201)

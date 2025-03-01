@@ -5,8 +5,9 @@ const {
   State,
   PropertyStatus,
 } = require("../models");
+const { storePropertyImageService } = require("./propertyImageService");
 
-const addPropertyService = async (data, decoded) => {
+const addPropertyService = async (data, decoded, files) => {
   const { user_id } = decoded;
 
   //   check if user exists
@@ -26,6 +27,9 @@ const addPropertyService = async (data, decoded) => {
     error.statusCode = 500;
     throw error;
   }
+
+  // store images
+  const propertyImages = await storePropertyImageService(property.id, files);
 
   return property;
 };
