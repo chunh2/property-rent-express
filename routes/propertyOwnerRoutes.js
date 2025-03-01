@@ -11,6 +11,12 @@ const addPropertyValidate = require("../validations/propertyOwner/addPropertyVal
 const validateReqMiddleware = require("../middlewares/utils/validateReqMiddleware");
 const updatePropertyValidate = require("../validations/propertyOwner/updatePropertyValidate");
 const getPropertiesValidate = require("../validations/propertyOwner/getPropertiesValidate");
+const {
+  uploadPropertyImagesMiddleware,
+} = require("../middlewares/uploadPropertyImagesMiddleware");
+const {
+  validatePropertyImagesMiddleware,
+} = require("../middlewares/validatePropertyImagesMiddleware");
 
 const router = Router();
 
@@ -18,6 +24,8 @@ router.use(authMiddleware, authOwnerMiddleware);
 
 router.post(
   "/properties",
+  uploadPropertyImagesMiddleware, //multer middleware
+  validatePropertyImagesMiddleware, //custom middleware
   addPropertyValidate,
   validateReqMiddleware,
   addProperty
