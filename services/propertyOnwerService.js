@@ -4,6 +4,7 @@ const {
   PropertyType,
   State,
   PropertyStatus,
+  PropertyImage,
 } = require("../models");
 const { storePropertyImageService } = require("./propertyImageService");
 
@@ -79,6 +80,10 @@ const getPropertiesService = async (user_id, data) => {
       {
         model: PropertyStatus,
         as: "property_status",
+      },
+      {
+        model: PropertyImage,
+        as: "property_images",
       },
     ],
   });
