@@ -43,6 +43,8 @@ router.get("/properties/:id", getProperty);
 
 router.patch(
   "/properties/:id",
+  uploadPropertyImagesMiddleware, //multer middleware
+  // validatePropertyImagesMiddleware, //custom middleware
   updatePropertyValidate,
   validateReqMiddleware,
   updateProperty
