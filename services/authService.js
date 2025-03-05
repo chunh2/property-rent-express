@@ -99,4 +99,25 @@ const registerService = async (data) => {
   return user;
 };
 
-module.exports = { loginService, registerService };
+const getRolesService = async () => {
+  const roles = Role.findAll({
+    attributes: ["role_id", "role_name"],
+    order: [["role_id", "ASC"]],
+  });
+
+  if (!roles) {
+    const error = new Error("Failed to retrieve roles");
+    error.statusCode = 500;
+    throw error;
+  }
+
+  if (roles.length <= 0) {
+    const error = new Error("Roles not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return roles;
+};
+
+module.exports = { loginService, registerService, getRolesService };

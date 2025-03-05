@@ -6,6 +6,7 @@ const {
   register,
   validateOwner,
   validateTenant,
+  getRoles,
 } = require("../controllers/authController");
 const registerValidate = require("../validations/auth/registerValidate");
 
@@ -18,5 +19,7 @@ router.post("/register", registerValidate, validateReqMiddleware, register);
 router.get("/auth/validate/owner", validateOwner);
 
 router.get("/auth/validate/tenant", validateTenant);
+
+router.get("/roles", getRoles);
 
 module.exports = router;

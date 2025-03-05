@@ -1,5 +1,9 @@
 const { matchedData } = require("express-validator");
-const { loginService, registerService } = require("../services/authService");
+const {
+  loginService,
+  registerService,
+  getRolesService,
+} = require("../services/authService");
 const { verifyToken } = require("../utils/jwt");
 
 const login = async (req, res, next) => {
@@ -109,4 +113,16 @@ const validateTenant = (req, res) => {
   }
 };
 
-module.exports = { login, register, validateOwner, validateTenant };
+const getRoles = async (req, res) => {
+  try {
+    const roles = await getRolesService();
+
+    return res
+      .status(200)
+      .json({ message: "Roles retrieved successfully", data: roles });
+  } catch (e) {
+    return res.status(e.statusCode).json({ error: e.message });
+  }
+};
+
+module.exports = { login, register, validateOwner, validateTenant, getRoles };
