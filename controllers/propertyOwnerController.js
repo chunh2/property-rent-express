@@ -62,9 +62,11 @@ const updateProperty = async (req, res) => {
   } = req;
 
   try {
-    await updatePropertyService(data, user_id);
+    const id = await updatePropertyService(data, user_id);
 
-    return res.status(200).json({ message: "Property updated successfully" });
+    return res
+      .status(200)
+      .json({ message: "Property updated successfully", data: { id } });
   } catch (e) {
     return res.status(e.statusCode).json({ error: e.message });
   }

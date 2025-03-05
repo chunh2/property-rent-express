@@ -183,6 +183,8 @@ const updatePropertyService = async (data, user_id) => {
     error.statusCode = 500;
     throw error;
   }
+
+  return id;
 };
 
 const deletePropertyService = async (id, user_id) => {
