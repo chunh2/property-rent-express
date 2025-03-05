@@ -6,6 +6,7 @@ const {
   getProperties,
   updateProperty,
   deleteProperty,
+  getProperty,
 } = require("../controllers/propertyOwnerController");
 const addPropertyValidate = require("../validations/propertyOwner/addPropertyValidate");
 const validateReqMiddleware = require("../middlewares/utils/validateReqMiddleware");
@@ -37,6 +38,8 @@ router.get(
   validateReqMiddleware,
   getProperties
 );
+
+router.get("/properties/:id", getProperty);
 
 router.patch(
   "/properties/:id",

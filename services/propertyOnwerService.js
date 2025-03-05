@@ -97,6 +97,50 @@ const getPropertiesService = async (user_id, data) => {
   return { count, properties };
 };
 
+const getPropertyService = async (id, user_id) => {
+  const property = await Property.findByPk(id, {
+    include: [
+      {
+        model: PropertyType,
+        as: "property_type",
+        attributes: ["name"],
+      },
+      {
+        model: State,
+        as: "state",
+        attributes: ["name"],
+      },
+      {
+        model: PropertyStatus,
+        as: "property_status",
+        attributes: ["name"],
+      },
+      {
+        model: PropertyImage,
+        as: "property_images",
+      },
+    ],
+  });
+
+  // if property not found
+  if (!property) {
+    const error = new Error("Property not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // 403 Forbidden
+  if (property?.user_id !== Number(user_id)) {
+    const error = new Error(
+      "You do not have permission to access this resource"
+    );
+    error.statusCode = 403;
+    throw error;
+  }
+
+  return property;
+};
+
 const updatePropertyService = async (data, user_id) => {
   const { id } = data;
 
@@ -176,6 +220,7 @@ const deletePropertyService = async (id, user_id) => {
 module.exports = {
   addPropertyService,
   getPropertiesService,
+  getPropertyService,
   updatePropertyService,
   deletePropertyService,
 };

@@ -4,6 +4,7 @@ const {
   getPropertiesService,
   updatePropertyService,
   deletePropertyService,
+  getPropertyService,
 } = require("../services/propertyOnwerService");
 
 const addProperty = async (req, res) => {
@@ -32,6 +33,23 @@ const getProperties = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Properties found", count, data: properties });
+  } catch (e) {
+    return res.status(e.statusCode).json({ error: e.message });
+  }
+};
+
+const getProperty = async (req, res) => {
+  const { user_id } = req.decoded;
+  const {
+    params: { id },
+  } = req;
+
+  try {
+    const property = await getPropertyService(id, user_id);
+
+    return res
+      .status(200)
+      .json({ message: "Property fetched successfully", data: property });
   } catch (e) {
     return res.status(e.statusCode).json({ error: e.message });
   }
@@ -67,4 +85,10 @@ const deleteProperty = async (req, res) => {
   }
 };
 
-module.exports = { addProperty, getProperties, updateProperty, deleteProperty };
+module.exports = {
+  addProperty,
+  getProperties,
+  getProperty,
+  updateProperty,
+  deleteProperty,
+};
