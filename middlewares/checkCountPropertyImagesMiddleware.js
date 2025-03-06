@@ -46,6 +46,14 @@ const checkCountPropertyImagesMiddleware = async (req, res, next) => {
       .json({ error: "Images exceeds maximum limit of 10" });
   }
 
+  if (count <= 0) {
+    await Promise.all(files.map((file) => deleteFile(file.path)));
+
+    return res
+      .status(400)
+      .json({ error: "Remaining image cannot less than 1 image" });
+  }
+
   next();
 };
 
