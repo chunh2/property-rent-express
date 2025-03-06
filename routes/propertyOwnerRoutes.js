@@ -18,6 +18,7 @@ const {
 const {
   validatePropertyImagesMiddleware,
 } = require("../middlewares/validatePropertyImagesMiddleware");
+const checkCountPropertyImagesMiddleware = require("../middlewares/checkCountPropertyImagesMiddleware");
 
 const router = Router();
 
@@ -44,9 +45,9 @@ router.get("/properties/:id", getProperty);
 router.patch(
   "/properties/:id",
   uploadPropertyImagesMiddleware, //multer middleware
-  // validatePropertyImagesMiddleware, //custom middleware
   updatePropertyValidate,
   validateReqMiddleware,
+  checkCountPropertyImagesMiddleware,
   updateProperty
 );
 
