@@ -6,7 +6,9 @@ const {
   PropertyStatus,
   PropertyImage,
 } = require("../models");
+const { Op } = require("sequelize");
 const { storePropertyImageService } = require("./propertyImageService");
+const deleteFile = require("../utils/deleteFile");
 
 const addPropertyService = async (data, decoded, files) => {
   const { user_id } = decoded;
@@ -141,7 +143,7 @@ const getPropertyService = async (id, user_id) => {
   return property;
 };
 
-const updatePropertyService = async (data, user_id) => {
+const updatePropertyService = async (data, user_id, validDeletions, files) => {
   const { id } = data;
 
   // check if user exists
@@ -183,6 +185,38 @@ const updatePropertyService = async (data, user_id) => {
     error.statusCode = 500;
     throw error;
   }
+
+  // get info of file to be deleted
+  const propertyImages = await PropertyImage.findAll({
+    where: {
+      id: {
+        [Op.in]: [...validDeletions],
+      },
+    },
+  });
+
+  // delete actual files
+  await Promise.all(
+    propertyImages.map((propertyImage) => deleteFile(propertyImage.image_path))
+  );
+
+  // delete metadata of file in DB
+  const deletedCount = await PropertyImage.destroy({
+    where: {
+      id: {
+        [Op.in]: [...validDeletions],
+      },
+    },
+  });
+
+  if (deletedCount !== validDeletions.length) {
+    const error = new Error("Error deleting property images");
+    error.statusCode = 500;
+    throw error;
+  }
+
+  // store new images in DB
+  await storePropertyImageService(id, files);
 
   return id;
 };

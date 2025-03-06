@@ -151,6 +151,19 @@ const updatePropertySchema = {
       errorMessage: "Invalid state",
     },
   },
+
+  property_images_ids_DELETE: {
+    in: ["body"],
+    trim: true,
+    escape: true,
+    optional: true,
+
+    isArray: {
+      errorMessage: "Must be an array",
+    },
+
+    toInt: true,
+  },
 };
 
 module.exports = checkSchema(updatePropertySchema);

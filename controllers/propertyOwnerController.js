@@ -59,10 +59,17 @@ const updateProperty = async (req, res) => {
   const data = matchedData(req);
   const {
     decoded: { user_id },
+    body: { validDeletions = [] },
+    files,
   } = req;
 
   try {
-    const id = await updatePropertyService(data, user_id);
+    const id = await updatePropertyService(
+      data,
+      user_id,
+      validDeletions,
+      files
+    );
 
     return res
       .status(200)
