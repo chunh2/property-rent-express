@@ -152,6 +152,24 @@ const updatePropertySchema = {
     },
   },
 
+  property_status_id: {
+    in: ["body"],
+    trim: true,
+    escape: true,
+    optional: true,
+
+    notEmpty: {
+      errorMessage: "Property status is required",
+    },
+
+    isInt: {
+      options: { min: 1 },
+      errorMessage: "Invalid property status",
+    },
+
+    toInt: true,
+  },
+
   property_images_ids_DELETE: {
     in: ["body"],
     trim: true,
