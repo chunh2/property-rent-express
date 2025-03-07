@@ -65,7 +65,7 @@ const getPropertiesService = async (user_id, data) => {
   }
 
   //   search for properties
-  const { count, rows: properties } = await Property.findAndCountAll({
+  const { rows: properties } = await Property.findAndCountAll({
     where: whereConditions,
     limit,
     offset,
@@ -95,6 +95,8 @@ const getPropertiesService = async (user_id, data) => {
     error.statusCode = 404;
     throw error;
   }
+
+  const count = properties.length;
 
   return { count, properties };
 };
