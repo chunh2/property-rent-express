@@ -232,7 +232,14 @@ const deletePropertyService = async (id, user_id) => {
   }
 
   // check if property exists
-  const property = await Property.findByPk(id);
+  const property = await Property.findByPk(id, {
+    include: [
+      {
+        model: PropertyImage,
+        as: "property_images",
+      },
+    ],
+  });
 
   if (!property) {
     const error = new Error("Property not found");
@@ -248,6 +255,12 @@ const deletePropertyService = async (id, user_id) => {
     error.statusCode = 403;
     throw error;
   }
+
+  await Promise.all(
+    property.property_images?.map((propertyImage) =>
+      deleteFile(propertyImage.image_path)
+    )
+  );
 
   //   perform delete
   await property.destroy();
