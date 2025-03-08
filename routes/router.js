@@ -4,11 +4,13 @@ const propertyOwnerRouter = require("./propertyOwnerRoutes");
 const stateRouter = require("./stateRoutes");
 const propertyTypeRouter = require("./propertyTypeRoutes");
 const propertyStatusRouter = require("./propertyStatusRoutes");
+const propertyTenantRouter = require("./propertyTenantRoutes");
 
 const router = Router();
 
 router.use("/", authRoutes);
 router.use("/owner/", propertyOwnerRouter);
+router.use("/tenant/", propertyTenantRouter);
 router.use("/", stateRouter);
 router.use("/", propertyTypeRouter);
 router.use("/", propertyStatusRouter);
