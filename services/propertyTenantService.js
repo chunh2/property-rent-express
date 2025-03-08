@@ -58,11 +58,12 @@ const getPropertiesService = async (data) => {
 
   //   Conditions END
 
-  const { rows: properties } = await Property.findAndCountAll({
+  const { count, rows: properties } = await Property.findAndCountAll({
     where: whereConditions,
     offset,
     limit,
     order: [["createdAt", "DESC"]],
+    distinct: true,
     include: [
       {
         model: PropertyType,
@@ -92,9 +93,9 @@ const getPropertiesService = async (data) => {
     ],
   });
 
-  const count = properties?.length;
+  const count2 = properties?.length;
 
-  if (count <= 0) {
+  if (count2 <= 0) {
     const error = new Error("Properties not found");
     error.statusCode = 404;
     throw error;
