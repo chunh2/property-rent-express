@@ -49,9 +49,25 @@ const getPropertiesService = async (data) => {
   }
 
   if (search) {
-    whereConditions.title = {
-      [Op.like]: `%${search}%`,
-    };
+    const searchWords = search.split(/[\s,._-]+/).filter(Boolean);
+
+    whereConditions[Op.or] = searchWords.flatMap((word) => [
+      {
+        title: {
+          [Op.like]: `%${word}%`,
+        },
+      },
+      {
+        city: {
+          [Op.like]: `%${word}%`,
+        },
+      },
+      {
+        "$state.name$": {
+          [Op.like]: `%${word}%`,
+        },
+      },
+    ]);
   }
 
   const offset = (page - 1) * limit;
@@ -74,6 +90,7 @@ const getPropertiesService = async (data) => {
         model: State,
         as: "state",
         attributes: ["id", "name"],
+        required: true,
       },
       {
         model: PropertyStatus,
