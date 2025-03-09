@@ -104,4 +104,44 @@ const getPropertiesService = async (data) => {
   return { properties, count };
 };
 
-module.exports = { getPropertiesService };
+const getPropertyService = async (id) => {
+  const property = await Property.findByPk(id, {
+    include: [
+      {
+        model: PropertyType,
+        as: "property_type",
+        attributes: ["id", "name"],
+      },
+      {
+        model: State,
+        as: "state",
+        attributes: ["id", "name"],
+      },
+      {
+        model: PropertyStatus,
+        as: "property_status",
+        attributes: ["id", "name"],
+      },
+      {
+        model: PropertyImage,
+        as: "property_images",
+        attributes: ["id", "image_path"],
+      },
+      {
+        model: User,
+        as: "user",
+        attributes: ["user_id", "name", "email", "phone"],
+      },
+    ],
+  });
+
+  if (!property) {
+    const error = new Error("Property not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return property;
+};
+
+module.exports = { getPropertiesService, getPropertyService };

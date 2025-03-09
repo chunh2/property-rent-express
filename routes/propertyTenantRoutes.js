@@ -1,5 +1,8 @@
 const { Router } = require("express");
-const { getProperties } = require("../controllers/propertyTenantController");
+const {
+  getProperties,
+  getProperty,
+} = require("../controllers/propertyTenantController");
 const getPropertiesValidate = require("../validations/propertyTenant/getPropertiesValidate");
 const validateReqMiddleware = require("../middlewares/utils/validateReqMiddleware");
 
@@ -11,5 +14,7 @@ router.get(
   validateReqMiddleware,
   getProperties
 );
+
+router.get("/properties/:id", getProperty);
 
 module.exports = router;

@@ -1,5 +1,8 @@
 const { matchedData } = require("express-validator");
-const { getPropertiesService } = require("../services/propertyTenantService");
+const {
+  getPropertiesService,
+  getPropertyService,
+} = require("../services/propertyTenantService");
 
 const getProperties = async (req, res) => {
   const data = matchedData(req);
@@ -19,4 +22,20 @@ const getProperties = async (req, res) => {
   }
 };
 
-module.exports = { getProperties };
+const getProperty = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+
+  try {
+    const property = await getPropertyService(id);
+
+    return res
+      .status(200)
+      .json({ message: "Property retrieved successfully", data: property });
+  } catch (e) {
+    return res.status(e.statusCode).json({ error: e.message });
+  }
+};
+
+module.exports = { getProperties, getProperty };
