@@ -1,5 +1,8 @@
 const { matchedData } = require("express-validator");
-const { addMessageService } = require("../services/messageService");
+const {
+  addMessageService,
+  getMessagesByChatRoomIdService,
+} = require("../services/messageService");
 
 const addMessage = async (req, res) => {
   const data = matchedData(req);
@@ -18,4 +21,24 @@ const addMessage = async (req, res) => {
   }
 };
 
-module.exports = { addMessage };
+const getMessagesByChatRoomId = async (req, res) => {
+  const {
+    params: { chatRoomId },
+  } = req;
+
+  const {
+    decoded: { user_id },
+  } = req;
+
+  try {
+    const messages = await getMessagesByChatRoomIdService(chatRoomId, user_id);
+
+    return res
+      .status(200)
+      .json({ message: "Messages retrieved successfully", data: messages });
+  } catch (e) {
+    return res.status(e.statusCode).json({ error: e.message });
+  }
+};
+
+module.exports = { addMessage, getMessagesByChatRoomId };
