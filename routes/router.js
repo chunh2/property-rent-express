@@ -5,6 +5,7 @@ const stateRouter = require("./stateRoutes");
 const propertyTypeRouter = require("./propertyTypeRoutes");
 const propertyStatusRouter = require("./propertyStatusRoutes");
 const propertyTenantRouter = require("./propertyTenantRoutes");
+const chatRoomRouter = require("./chatRoomRoutes");
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use("/tenant/", propertyTenantRouter);
 router.use("/", stateRouter);
 router.use("/", propertyTypeRouter);
 router.use("/", propertyStatusRouter);
+router.use("/", chatRoomRouter);
 
 module.exports = router;
