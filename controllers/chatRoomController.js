@@ -12,11 +12,11 @@ const addChatRoom = async (req, res) => {
   } = req;
 
   try {
-    const chatMembers = await addChatRoomService(data, userId);
+    const chatRoomId = await addChatRoomService(data, userId);
 
     return res
       .status(200)
-      .json({ message: "Chat room added successfully", data: chatMembers });
+      .json({ message: "Chat room added successfully", data: chatRoomId });
   } catch (e) {
     return res.status(e.statusCode).json({ error: e.message });
   }

@@ -47,10 +47,13 @@ const addChatRoomService = async (data, userId) => {
 
   //   if already in the same chat room, prevent creation
   if (existingChatMember) {
-    const error = new Error("Already created chat room between these users");
-    error.statusCode = 400;
+    // const error = new Error("Already created chat room between these users");
+    // error.statusCode = 400;
 
-    throw error;
+    // throw error;
+
+    const { chat_room_id } = existingChatMember;
+    return { chatRoomId: chat_room_id };
   }
 
   const chatRoom = await ChatRoom.create();
@@ -59,7 +62,9 @@ const addChatRoomService = async (data, userId) => {
   const chatMember1 = await addChatMemberService(chatRoom.id, userId);
   const chatMember2 = await addChatMemberService(chatRoom.id, user_id);
 
-  return { chatMember1, chatMember2 };
+  const { chat_room_id } = chatMember1;
+
+  return { chatRoomId: chat_room_id };
 };
 
 const getChatRoomByUserIdService = async (userId) => {
