@@ -2,7 +2,10 @@ const { Router } = require("express");
 const addChatRoomValidate = require("../validations/chatRoom/addChatRoomValidate");
 const authMiddleware = require("../middlewares/authMiddleware");
 const validateReqMiddleware = require("../middlewares/utils/validateReqMiddleware");
-const { addChatRoom } = require("../controllers/chatRoomController");
+const {
+  addChatRoom,
+  getChatRoomByUserId,
+} = require("../controllers/chatRoomController");
 
 const router = new Router();
 
@@ -14,5 +17,7 @@ router.post(
   validateReqMiddleware,
   addChatRoom
 );
+
+router.get("/chat-rooms", getChatRoomByUserId);
 
 module.exports = router;

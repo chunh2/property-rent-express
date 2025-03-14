@@ -62,4 +62,22 @@ const addChatRoomService = async (data, userId) => {
   return { chatMember1, chatMember2 };
 };
 
-module.exports = { addChatRoomService };
+const getChatRoomByUserIdService = async (userId) => {
+  const chatMembers = await ChatMember.findAll({
+    where: {
+      user_id: userId,
+    },
+    include: [
+      {
+        model: ChatRoom,
+        as: "chat_room",
+      },
+    ],
+  });
+
+  const chatRooms = chatMembers.map((chatMember) => chatMember.chat_room);
+
+  return chatRooms;
+};
+
+module.exports = { addChatRoomService, getChatRoomByUserIdService };
