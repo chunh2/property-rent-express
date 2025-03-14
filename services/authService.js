@@ -44,7 +44,9 @@ const loginService = async (data) => {
 
   const token = generateAccessToken(user, roleId);
 
-  return { token, roleId };
+  const userInfo = await User.findOne({ where: { email } });
+
+  return { token, roleId, user: userInfo };
 };
 
 const registerService = async (data) => {
