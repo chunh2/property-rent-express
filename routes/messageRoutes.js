@@ -5,13 +5,22 @@ const validateReqMiddleware = require("../middlewares/utils/validateReqMiddlewar
 const {
   addMessage,
   getMessagesByChatRoomId,
+  getMessagesByUserIds,
 } = require("../controllers/messageController");
+const getMessagesByUserIdsValidate = require("../validations/message/getMessagesByUserIdsValidate");
 
 const router = Router();
 
 router.use(authMiddleware);
 
 router.post("/messages", addMessageValidate, validateReqMiddleware, addMessage);
+
+router.get(
+  "/messages",
+  getMessagesByUserIdsValidate,
+  validateReqMiddleware,
+  getMessagesByUserIds
+);
 
 router.get("/messages/:chatRoomId", getMessagesByChatRoomId);
 

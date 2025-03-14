@@ -1,4 +1,6 @@
 const { ChatMember, ChatRoom, Message } = require("../models");
+const { Op } = require("sequelize");
+const { addChatRoomService } = require("./chatRoomService");
 
 const addMessageService = async (data, user_id) => {
   const { content, chat_room_id } = data;
@@ -39,6 +41,64 @@ const addMessageService = async (data, user_id) => {
   }
 
   return message;
+};
+
+const getMessagesByUserIdsService = async (data, userId) => {
+  const { user_id, page = 1, limit = 10 } = data;
+
+  if (userId === user_id) {
+    const error = new Error("Duplicate user ID");
+    error.statusCode = 400;
+
+    throw error;
+  }
+
+  const user1chatMembers = await ChatMember.findAll({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  // extract chat_room_id
+  const chatRoomIds = user1chatMembers.map(
+    (chatMember) => chatMember.chat_room_id
+  );
+
+  const user2chatMembers = await ChatMember.findAll({
+    where: {
+      user_id: user_id,
+    },
+  });
+
+  const matchedChatMember = user2chatMembers.find((chatMember) =>
+    chatRoomIds.includes(chatMember.chat_room_id)
+  );
+
+  // create new chat room, if not exist
+  if (!matchedChatMember) {
+    await addChatRoomService(data, userId);
+
+    return [];
+  }
+
+  const chatRoomId = matchedChatMember.chat_room_id;
+
+  // getting messages
+
+  const offset = (page - 1) * limit;
+
+  const whereConditions = {
+    chat_room_id: chatRoomId,
+  };
+
+  const messages = await Message.findAll({
+    where: whereConditions,
+    order: [["createdAt", "DESC"]],
+    limit,
+    offset,
+  });
+
+  return messages;
 };
 
 const getMessagesByChatRoomIdService = async (chatRoomId, user_id) => {
@@ -90,4 +150,8 @@ const getMessagesByChatRoomIdService = async (chatRoomId, user_id) => {
   return messages;
 };
 
-module.exports = { addMessageService, getMessagesByChatRoomIdService };
+module.exports = {
+  addMessageService,
+  getMessagesByUserIdsService,
+  getMessagesByChatRoomIdService,
+};
