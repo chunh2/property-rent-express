@@ -1,4 +1,4 @@
-const { ChatMember, ChatRoom, Message } = require("../models");
+const { ChatMember, ChatRoom, Message, User } = require("../models");
 const { Op } = require("sequelize");
 const { addChatRoomService } = require("./chatRoomService");
 
@@ -110,6 +110,12 @@ const getMessagesByChatRoomIdService = async (chatRoomId, user_id) => {
       {
         model: Message,
         as: "messages",
+        include: [
+          {
+            model: User,
+            as: "sender",
+          },
+        ],
       },
       {
         model: ChatMember,
