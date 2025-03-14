@@ -71,6 +71,23 @@ const getChatRoomByUserIdService = async (userId) => {
       {
         model: ChatRoom,
         as: "chat_room",
+        include: [
+          {
+            model: ChatMember,
+            as: "chat_members",
+            where: {
+              user_id: {
+                [Op.ne]: userId,
+              },
+            },
+            include: [
+              {
+                model: User,
+                as: "user",
+              },
+            ],
+          },
+        ],
       },
     ],
   });
