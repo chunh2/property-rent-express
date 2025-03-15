@@ -3,16 +3,22 @@ const dotenv = require("dotenv");
 const router = require("./routes/router");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require("http");
+const setupSocket = require("./socket/config");
 
 dotenv.config();
 
 // Server
 
 const app = express();
+const server = http.createServer(app);
+
+const io = setupSocket(server);
 
 const PORT = process.env.PORT || 6000;
 
-app.listen(PORT, () => console.log(`Listening PORT ${PORT}`));
+// app.listen(PORT, () => console.log(`Listening PORT ${PORT}`));
+server.listen(PORT, () => console.log(`Listening PORT ${PORT}`));
 
 // Server
 
