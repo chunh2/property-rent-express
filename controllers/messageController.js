@@ -12,11 +12,12 @@ const addMessage = async (req, res) => {
   } = req;
 
   try {
-    const message = await addMessageService(data, user_id);
+    const { message, receivers } = await addMessageService(data, user_id);
 
-    return res
-      .status(201)
-      .json({ message: "Message sent successfully", data: message });
+    return res.status(201).json({
+      message: "Message sent successfully",
+      data: { message, receivers },
+    });
   } catch (e) {
     return res.status(e.statusCode).json({ error: e.message });
   }

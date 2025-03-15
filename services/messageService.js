@@ -16,6 +16,12 @@ const addMessageService = async (data, user_id) => {
         where: {
           user_id,
         },
+        include: [
+          {
+            model: User,
+            as: "user",
+          },
+        ],
       },
     ],
   });
@@ -26,6 +32,22 @@ const addMessageService = async (data, user_id) => {
 
     throw error;
   }
+
+  // get other users who will receive the message (excluding sender)
+  const chatMembersReceivers = await ChatMember.findAll({
+    where: {
+      chat_room_id: chat_room_id,
+      user_id: {
+        [Op.ne]: user_id,
+      },
+    },
+    include: [
+      {
+        model: User,
+        as: "user",
+      },
+    ],
+  });
 
   const message = await Message.create({
     content,
@@ -40,7 +62,16 @@ const addMessageService = async (data, user_id) => {
     throw error;
   }
 
-  return message;
+  const messageReturn = await Message.findByPk(message.id, {
+    include: [
+      {
+        model: User,
+        as: "sender",
+      },
+    ],
+  });
+
+  return { message: messageReturn, receivers: chatMembersReceivers };
 };
 
 const getMessagesByUserIdsService = async (data, userId) => {
