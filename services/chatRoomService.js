@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { ChatRoom, ChatMember, User, sequelize } = require("../models");
+const { ChatRoom, ChatMember, User, Role, sequelize } = require("../models");
 const { addChatMemberService } = require("./chatMemberService");
 
 const addChatRoomService = async (data, userId) => {
@@ -67,7 +67,7 @@ const addChatRoomService = async (data, userId) => {
   return { chatRoomId: chat_room_id };
 };
 
-const getChatRoomByUserIdService = async (userId) => {
+const getChatRoomByUserIdService = async (userId, roleId) => {
   const chatMembers = await ChatMember.findAll({
     where: {
       user_id: userId,
@@ -76,11 +76,13 @@ const getChatRoomByUserIdService = async (userId) => {
       {
         model: ChatRoom,
         as: "chat_room",
+        required: true,
         include: [
           {
             model: ChatMember,
             as: "chat_members",
             where: {
+              // only load other member(s), not including current login user
               user_id: {
                 [Op.ne]: userId,
               },
@@ -89,6 +91,19 @@ const getChatRoomByUserIdService = async (userId) => {
               {
                 model: User,
                 as: "user",
+                required: true,
+                include: [
+                  {
+                    model: Role,
+                    attributes: ["role_id"],
+                    where: {
+                      // only load different role user
+                      role_id: {
+                        [Op.ne]: roleId,
+                      },
+                    },
+                  },
+                ],
               },
             ],
           },

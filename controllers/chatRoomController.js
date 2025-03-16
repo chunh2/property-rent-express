@@ -24,11 +24,11 @@ const addChatRoom = async (req, res) => {
 
 const getChatRoomByUserId = async (req, res) => {
   const {
-    decoded: { user_id: userId },
+    decoded: { user_id: userId, role_id: roleId },
   } = req;
 
   try {
-    const chatRooms = await getChatRoomByUserIdService(userId);
+    const chatRooms = await getChatRoomByUserIdService(userId, roleId);
 
     return res
       .status(200)
