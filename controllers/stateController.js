@@ -8,7 +8,7 @@ const getStates = async (req, res) => {
       .status(200)
       .json({ message: "States retrieved successfully", data: states });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 

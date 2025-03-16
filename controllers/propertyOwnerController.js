@@ -19,7 +19,7 @@ const addProperty = async (req, res) => {
       .status(201)
       .json({ message: "Property added successfully", data: property });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -34,7 +34,7 @@ const getProperties = async (req, res) => {
       .status(200)
       .json({ message: "Properties found", count, data: properties });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -51,7 +51,7 @@ const getProperty = async (req, res) => {
       .status(200)
       .json({ message: "Property fetched successfully", data: property });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -75,7 +75,7 @@ const updateProperty = async (req, res) => {
       .status(200)
       .json({ message: "Property updated successfully", data: { id } });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -90,7 +90,7 @@ const deleteProperty = async (req, res) => {
 
     return res.status(200).json({ message: "Property deleted successfully" });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 

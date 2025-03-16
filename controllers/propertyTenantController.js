@@ -18,7 +18,7 @@ const getProperties = async (req, res) => {
       data: properties,
     });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -34,7 +34,7 @@ const getProperty = async (req, res) => {
       .status(200)
       .json({ message: "Property retrieved successfully", data: property });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 

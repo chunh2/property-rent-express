@@ -23,7 +23,7 @@ const login = async (req, res, next) => {
 
     return res.status(200).json({ token, roleId, user });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -37,7 +37,7 @@ const register = async (req, res, next) => {
       .status(201)
       .json({ message: "User registered successfully", user });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -121,7 +121,7 @@ const getRoles = async (req, res) => {
       .status(200)
       .json({ message: "Roles retrieved successfully", data: roles });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 

@@ -18,7 +18,7 @@ const addChatRoom = async (req, res) => {
       .status(200)
       .json({ message: "Chat room added successfully", data: chatRoomId });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -34,7 +34,7 @@ const getChatRoomByUserId = async (req, res) => {
       .status(200)
       .json({ message: "Chat rooms retrieved successfully", data: chatRooms });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 

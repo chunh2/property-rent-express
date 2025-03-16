@@ -6,14 +6,12 @@ const getPropertyStatuses = async (req, res) => {
   try {
     const propertyStatuses = await getPropertyStatusesService();
 
-    return res
-      .status(200)
-      .json({
-        message: "Property statuses retrieved successfully",
-        data: propertyStatuses,
-      });
+    return res.status(200).json({
+      message: "Property statuses retrieved successfully",
+      data: propertyStatuses,
+    });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 

@@ -19,7 +19,7 @@ const addMessage = async (req, res) => {
       data: { message, receivers },
     });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -37,7 +37,7 @@ const getMessagesByUserIds = async (req, res) => {
       .status(200)
       .json({ message: "Messages retrieved successfully", data: messages });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
@@ -57,7 +57,7 @@ const getMessagesByChatRoomId = async (req, res) => {
       .status(200)
       .json({ message: "Messages retrieved successfully", data: messages });
   } catch (e) {
-    return res.status(e.statusCode).json({ error: e.message });
+    return res.status(e.statusCode || 500).json({ error: e.message });
   }
 };
 
