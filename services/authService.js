@@ -161,9 +161,29 @@ const updatePasswordService = async (data, userId) => {
   );
 };
 
+const updateProfileService = async (data, userId) => {
+  const user = await User.findByPk(userId);
+
+  // User not found
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+
+    throw error;
+  }
+
+  // update each column
+  for (const column in data) {
+    user[column] = data[column];
+  }
+
+  await user.save();
+};
+
 module.exports = {
   loginService,
   registerService,
   getRolesService,
   updatePasswordService,
+  updateProfileService,
 };

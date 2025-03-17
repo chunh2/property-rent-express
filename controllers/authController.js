@@ -4,6 +4,7 @@ const {
   registerService,
   getRolesService,
   updatePasswordService,
+  updateProfileService,
 } = require("../services/authService");
 const { verifyToken } = require("../utils/jwt");
 
@@ -142,6 +143,24 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  const data = matchedData(req);
+
+  const {
+    decoded: { user_id: userId },
+  } = req;
+
+  try {
+    await updateProfileService(data, userId);
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+    });
+  } catch (e) {
+    return res.status(e.statusCode || 500).json({ error: e.message });
+  }
+};
+
 module.exports = {
   login,
   register,
@@ -149,4 +168,5 @@ module.exports = {
   validateTenant,
   getRoles,
   updatePassword,
+  updateProfile,
 };
