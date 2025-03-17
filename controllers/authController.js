@@ -3,6 +3,7 @@ const {
   loginService,
   registerService,
   getRolesService,
+  updatePasswordService,
 } = require("../services/authService");
 const { verifyToken } = require("../utils/jwt");
 
@@ -125,4 +126,27 @@ const getRoles = async (req, res) => {
   }
 };
 
-module.exports = { login, register, validateOwner, validateTenant, getRoles };
+const updatePassword = async (req, res) => {
+  const data = matchedData(req);
+
+  const {
+    decoded: { user_id: userId },
+  } = req;
+
+  try {
+    await updatePasswordService(data, userId);
+
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (e) {
+    return res.status(e.statusCode || 500).json({ error: e.message });
+  }
+};
+
+module.exports = {
+  login,
+  register,
+  validateOwner,
+  validateTenant,
+  getRoles,
+  updatePassword,
+};

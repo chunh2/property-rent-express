@@ -7,8 +7,11 @@ const {
   validateOwner,
   validateTenant,
   getRoles,
+  updatePassword,
 } = require("../controllers/authController");
 const registerValidate = require("../validations/auth/registerValidate");
+const authMiddleware = require("../middlewares/authMiddleware");
+const updatePasswordValidate = require("../validations/auth/updatePasswordValidate");
 
 const router = Router();
 
@@ -21,5 +24,13 @@ router.get("/auth/validate/owner", validateOwner);
 router.get("/auth/validate/tenant", validateTenant);
 
 router.get("/roles", getRoles);
+
+router.patch(
+  "/users/password",
+  authMiddleware,
+  updatePasswordValidate,
+  validateReqMiddleware,
+  updatePassword
+);
 
 module.exports = router;

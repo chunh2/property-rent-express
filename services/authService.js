@@ -1,5 +1,5 @@
 const { User, Role, UserRole } = require("../models");
-const { checkPassword } = require("../utils/password");
+const { checkPassword, hashPassword } = require("../utils/password");
 const { generateAccessToken } = require("../utils/jwt");
 const { checkRole } = require("../utils/checkRole");
 
@@ -122,4 +122,48 @@ const getRolesService = async () => {
   return roles;
 };
 
-module.exports = { loginService, registerService, getRolesService };
+const updatePasswordService = async (data, userId) => {
+  const { oldPassword, newPassword, confirmNewPassword } = data;
+
+  const user = await User.scope("withPassword").findByPk(userId);
+
+  // User not found
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+
+    throw error;
+  }
+
+  const isPasswordMatched = await checkPassword(oldPassword, user.password);
+
+  console.log(isPasswordMatched);
+
+  // Incorrect password
+  if (!isPasswordMatched) {
+    const error = new Error("Incorrect old password");
+    error.statusCode = 401;
+
+    throw error;
+  }
+
+  const hashNewPassword = await hashPassword(newPassword);
+
+  const [affectedRows] = await User.update(
+    {
+      password: hashNewPassword,
+    },
+    {
+      where: {
+        user_id: userId,
+      },
+    }
+  );
+};
+
+module.exports = {
+  loginService,
+  registerService,
+  getRolesService,
+  updatePasswordService,
+};
