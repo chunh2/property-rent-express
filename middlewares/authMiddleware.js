@@ -1,5 +1,6 @@
 const { verifyToken } = require("../utils/jwt");
 const dotenv = require("dotenv");
+const { Role } = require("../models");
 
 dotenv.config();
 
@@ -25,12 +26,18 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-const authTenantMiddleware = (req, res, next) => {
+const authTenantMiddleware = async (req, res, next) => {
   const {
     decoded: { role_id },
   } = req;
 
-  const roleId = process.env.ROLE_ID_TENANT;
+  const role = await Role.findOne({
+    where: {
+      role_name: "tenant",
+    },
+  });
+
+  const roleId = role.role_id;
 
   if (parseInt(roleId) === parseInt(role_id)) {
     next();
@@ -41,12 +48,18 @@ const authTenantMiddleware = (req, res, next) => {
   }
 };
 
-const authOwnerMiddleware = (req, res, next) => {
+const authOwnerMiddleware = async (req, res, next) => {
   const {
     decoded: { role_id },
   } = req;
 
-  const roleId = process.env.ROLE_ID_OWNER;
+  const role = await Role.findOne({
+    where: {
+      role_name: "owner",
+    },
+  });
+
+  const roleId = role.role_id;
 
   if (parseInt(roleId) === parseInt(role_id)) {
     next();
