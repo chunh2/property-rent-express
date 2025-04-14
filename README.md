@@ -1,6 +1,9 @@
-## Backend Only
+# Property Rent (Backend Only)
 
-## Prerequisites
+- This project was developed using Express.js.
+- This project should be run with the frontend <code>property-rent-next</code>, developed using Next.js.
+
+## Software Requirements
 
 - Node.js
 - MySQL or similar
@@ -31,6 +34,8 @@ ALLOW_ORIGIN=
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
+4. <code>ALLOW_ORIGIN</code> should be the URL of the frontend.
+
 ## Database
 
 1. Run the following command.
@@ -40,6 +45,8 @@ npx sequelize-cli init
 ```
 
 2. Configure database information in <code>config/config.json</code>.
+
+3. Recommended to create the database first.
 
 ## Seeder
 
