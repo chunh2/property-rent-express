@@ -36,6 +36,14 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
 4. <code>ALLOW_ORIGIN</code> should be the URL of the frontend.
 
+## Folder
+
+1. In root directory, create folder for static file.
+
+```bash
+mkdir -p uploads/property-images
+```
+
 ## Database
 
 1. Run the following command.
