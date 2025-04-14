@@ -73,17 +73,3 @@ npm run dev
 ```bash
 npm run start
 ```
-
-## For Production
-
-1. Build the project for production.
-
-```bash
-npm run build
-```
-
-2. Preview the production build locally.
-
-```bash
-npm run preview
-```
