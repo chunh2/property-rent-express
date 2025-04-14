@@ -7,6 +7,7 @@ const {
   updateProfileService,
 } = require("../services/authService");
 const { verifyToken } = require("../utils/jwt");
+const { Role } = require("../models");
 
 const login = async (req, res, next) => {
   const data = matchedData(req);
@@ -43,7 +44,7 @@ const register = async (req, res, next) => {
   }
 };
 
-const validateOwner = (req, res) => {
+const validateOwner = async (req, res) => {
   const token =
     req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
 
@@ -60,7 +61,13 @@ const validateOwner = (req, res) => {
 
     const { role_id } = decoded;
 
-    const roleId = process.env.ROLE_ID_OWNER;
+    const role = await Role.findOne({
+      where: {
+        role_name: "owner",
+      },
+    });
+
+    const roleId = role.role_id;
 
     console.log(decoded);
 
@@ -69,7 +76,7 @@ const validateOwner = (req, res) => {
     }
 
     // role not match
-    if (role_id !== roleId) {
+    if (Number(role_id) !== Number(roleId)) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
@@ -79,7 +86,7 @@ const validateOwner = (req, res) => {
   }
 };
 
-const validateTenant = (req, res) => {
+const validateTenant = async (req, res) => {
   const token =
     req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
 
@@ -96,7 +103,13 @@ const validateTenant = (req, res) => {
 
     const { role_id } = decoded;
 
-    const roleId = process.env.ROLE_ID_TENANT;
+    const role = await Role.findOne({
+      where: {
+        role_name: "tenant",
+      },
+    });
+
+    const roleId = role.role_id;
 
     console.log(decoded);
 
@@ -105,7 +118,7 @@ const validateTenant = (req, res) => {
     }
 
     // role not match
-    if (role_id !== roleId) {
+    if (Number(role_id) !== Number(roleId)) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
