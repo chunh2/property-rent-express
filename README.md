@@ -48,8 +48,42 @@ npx sequelize-cli init
 
 3. Recommended to create the database first.
 
+4. Run migration.
+
+```bash
+npx sequelize-cli db:migrate
+```
+
 ## Seeder
 
 ```bash
 npx sequelize-cli db:seed:all
+```
+
+## For Development
+
+1. Run the development server with nodemon.
+
+```bash
+npm run dev
+```
+
+2. Run the development server without nodemon. (Optional)
+
+```bash
+npm run start
+```
+
+## For Production
+
+1. Build the project for production.
+
+```bash
+npm run build
+```
+
+2. Preview the production build locally.
+
+```bash
+npm run preview
 ```
